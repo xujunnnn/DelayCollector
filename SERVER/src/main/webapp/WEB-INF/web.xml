@@ -1,0 +1,57 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+  	<servlet-name>QosManage</servlet-name>
+  	<display-name>QosManage</display-name>
+  	<description></description>
+  	<servlet-class>qos.QosManage</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>TopoManage</servlet-name>
+  	<display-name>TopoManage</display-name>
+  	<description></description>
+  	<servlet-class>topology.TopoManage</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>VtopoManage</servlet-name>
+  	<display-name>VtopoManage</display-name>
+  	<description></description>
+  	<servlet-class>vtopo.VtopoManage</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>InitManage</servlet-name>
+  	<display-name>InitManage</display-name>
+  	<description></description>
+  	<servlet-class>initialize.InitManage</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>CustmoizeMonitorManage</servlet-name>
+  	<display-name>CustmoizeMonitorManage</display-name>
+  	<description></description>
+  	<servlet-class>CustomizeMonitor.CustmoizeMonitorManage</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>QosManage</servlet-name>
+  	<url-pattern>/QosManage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>TopoManage</servlet-name>
+  	<url-pattern>/TopoManage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>VtopoManage</servlet-name>
+  	<url-pattern>/VtopoManage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>InitManage</servlet-name>
+  	<url-pattern>/InitManage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>CustmoizeMonitorManage</servlet-name>
+  	<url-pattern>/CustmoizeMonitorManage</url-pattern>
+  </servlet-mapping>
+</web-app>

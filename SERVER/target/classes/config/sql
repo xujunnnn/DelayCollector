@@ -1,0 +1,6 @@
+select last(latency) from latency_load where SrcPort='openflow:1:1' and DestPort='openflow:2:2' 	 
+CREATE CONTINUOUS QUERY "Ip_History" ON "ip_load" BEGIN SELECT mean("byte") as "mean_byte",max("byte") as "max_byte",mean(packet) as "mean_packet",max("packet") as "max_packet", max("bytespeed") as "max_bytespeed",mean(packetspeed) as "mean_packetspeed" INTO "Ip_load_History_1m" FROM "ip_load" GROUP BY time(1m), DestMac,InPort,SrcMac END
+CREATE CONTINUOUS QUERY "protocol_load_history" ON "Flow_Static" BEGIN SELECT max(byte) as byte,max(packet) as "packet",max(bytespeed) as "max_bytespeed",mean(bytespeed) as "mean_bytespeed",max(packetspeed) as "max_packetspeed",mean(packetspeed) as "mean_packetspeed" INTO "protocol_load_History_1m" FROM "protocol_load" GROUP BY time(1m), Protocol,InPort END
+
+
+CREATE CONTINUOUS QUERY "protocol_load_history" ON "Flow_Static" BEGIN SELECT max(byte) as byte,max(packet) as "packet",max(bytespeed) as "max_bytespeed",mean(bytespeed) as "mean_bytespeed",max(packetspeed) as "max_packetspeed",mean(packetspeed) as "mean_packetspeed" INTO "protocol_load_History_1m" FROM "protocol_load" GROUP BY time(1m), Protocol,InPort END

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright ${license.git.copyrightYears} the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="QosEntry">
+
+  <resultMap type="com.ebupt.vnbo.class.qos.QosEntry" id="QosEntryResult">
+   <id column="QOSID" jdbcType="VARCHAR" property="qos_id"/>
+    <result column="DROPRATE" jdbcType="VARCHAR" property="drop_rate"/>
+    <result column="QUEUEID" jdbcType="VARCHAR" property="queue_id"/>
+     <result column="SRCHOST" jdbcType="VARCHAR" property="Srchost"/>
+    <result column="DESTHOST" jdbcType="VARCHAR" property="Desthost"/>
+    <result column="PROTOCOL" jdbcType="VARCHAR" property="ip_Protocol"/>
+     <result column="TCPSRCPORT" jdbcType="VARCHAR" property="Tcp_srcPort"/>
+    <result column="UDPSRCPORT" jdbcType="VARCHAR" property="Udp_srcPort"/>
+    <result column="TCPDESTPORT" jdbcType="VARCHAR" property="Tcp_destPort"/>
+    <result column="UDPDESTPORT" jdbcType="VARCHAR" property="Udp_destPort"/>
+  </resultMap>
+  <select id="querryQosEntry" resultMap="QosEntryResult">
+    SELECT QOSID,DROPRATE,QUEUEID,SRCHOST,DESTHOST,PROTOCOL,TCPSRCPORT,UDPSRCPORT,TCPDESTPORT,UDPDESTPORT from QOSPOLICY 
+  </select>
+  
+   <select id="querryQosEntryWithId" parameterType="com.ebupt.vnbo.class.qos.QosEntry" resultMap="QosEntryResult">
+    SELECT QOSID,DROPRATE,QUEUEID,SRCHOST,DESTHOST,PROTOCOL,TCPSRCPORT,UDPSRCPORT,TCPDESTPORT,UDPDESTPORT from QOSPOLICY where QOSID =#{qos_id}; 
+  </select>
+  
+<insert id="insertQosEntry" parameterType="com.ebupt.vnbo.class.qos.QosEntry">
+     INSERT ignore into QOSPOLICY (QOSID,DROPRATE,QUEUEID,SRCHOST,DESTHOST,PROTOCOL,TCPSRCPORT,UDPSRCPORT,TCPDESTPORT,UDPDESTPORT) values(#{qos_id},#{drop_rate},#{queue_id},#{Srchost},#{Desthost},#{ip_Protocol},#{Tcp_srcPort},#{Udp_srcPort},#{Tcp_destPort},#{Udp_destPort});
+</insert>
+
+<update id="updateQosPolicy" parameterType="com.ebupt.vnbo.class.qos.QosEntry">
+     UPDATE  QOSPOLICY SET QOSID=#{qos_id},DROPRATE=#{drop_rate},QUEUEID=#{queue_id},SRCHOST=#{Srchost},DESTHOST=#{Desthost},PROTOCOL=#{ip_Protocol},TCPSRCPORT=#{Tcp_srcPort},UDPSRCPORT=#{Udp_srcPort},TCPDESTPORT=#{Tcp_destPort},UDPDESTPORT=#{Udp_destPort} where QOSID =#{qos_id}; 
+</update>
+<delete id="deleteQosPolicy" parameterType="com.ebupt.vnbo.class.qos.QosEntry">
+        delete from QOSPOLICY where QOSID=#{qos_id}
+</delete>
+</mapper>
