@@ -1,6 +1,10 @@
 package com.ebupt.vnbo.classes.qos;
 
 import java.util.HashSet;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ebupt.vnbo.classes.abstracts.Config;
 import com.ebupt.vnbo.classes.abstracts.Operational;
@@ -29,6 +33,7 @@ import com.sun.glass.ui.TouchInputSupport;
 * 发布版本： V1.0  <br/>
  */
 public class QosEntry implements Config,Operational {
+	private static Logger logger=LoggerFactory.getLogger(QosEntry.class);
 	private String qos_id;
 	private String drop_rate;
 	private String queue_id;

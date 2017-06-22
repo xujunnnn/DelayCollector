@@ -34,6 +34,13 @@
   	<description></description>
   	<servlet-class>CustomizeMonitor.CustmoizeMonitorManage</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>Log4j2Init</servlet-name>
+  	<display-name>Log4j2Init</display-name>
+  	<description></description>
+  	<servlet-class>initialize.Log4j2Init</servlet-class>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>QosManage</servlet-name>
   	<url-pattern>/QosManage</url-pattern>
@@ -53,5 +60,10 @@
   <servlet-mapping>
   	<servlet-name>CustmoizeMonitorManage</servlet-name>
   	<url-pattern>/CustmoizeMonitorManage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>Log4j2Init</servlet-name>
+  	<url-pattern>/Log4j2Init</url-pattern>
+  	 
   </servlet-mapping>
 </web-app>

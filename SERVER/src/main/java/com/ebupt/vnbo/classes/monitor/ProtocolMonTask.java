@@ -3,6 +3,10 @@ package com.ebupt.vnbo.classes.monitor;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ebupt.vnbo.classes.enums.Protocol_Type;
 import com.ebupt.vnbo.classes.exception.ODL_IO_Exception;
 import com.ebupt.vnbo.classes.exception.OperationalException;
@@ -21,6 +25,7 @@ import com.ebupt.vnbo.util.InfluxDBUtil;
 * 发布版本： V1.0  <br/>
  */
 public class ProtocolMonTask implements Runnable {
+	private static Logger logger=LoggerFactory.getLogger(ProtocolMonTask.class);
 	private static final String PROTOCOLTABLE="3";
 	private static final long interval=4000;
 	private static final String measurement="protocol_load";
@@ -171,6 +176,7 @@ public class ProtocolMonTask implements Runnable {
 				Thread.sleep(interval);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
+				logger.error("ProtocolMonitorTask running error, error details {} ",e.getMessage());
 				e.printStackTrace();
 			}
 		

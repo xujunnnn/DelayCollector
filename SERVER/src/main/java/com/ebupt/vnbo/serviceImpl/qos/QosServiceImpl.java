@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ebupt.vnbo.classes.enums.OperationType;
@@ -18,10 +21,11 @@ import com.ebupt.vnbo.service.qos.QosService;
 
 
 public class QosServiceImpl implements QosService{
-
+	private static Logger logger=LoggerFactory.getLogger(QosServiceImpl.class);
 	public JSONObject resolve(Request request) {
 		// TODO Auto-generated method stub
 		QosRequest qosRequest=(QosRequest) request;
+		logger.info("receive QosRequest {}",qosRequest.toString());
 		if(qosRequest.getOperationType()==OperationType.ADD){
 			QosEntry qosEntry=qosRequest.getQosEntry();
 			qosEntry.setHash(qosEntry.hashCode());
@@ -64,6 +68,7 @@ public class QosServiceImpl implements QosService{
 		// apply the qos
 		try {
 			qos.send(null);
+			logger.info("success to send qos {}",qos.getQos_id());
 		} catch ( ConfigException | OperationalException e) {
 			// TODO Auto-generated catch block
 			result.put("Status", -1);
@@ -74,11 +79,13 @@ public class QosServiceImpl implements QosService{
 		//insert the qos	
 		try {
 			qosEntryDao.insert(qos);
+			logger.info("success to insert qos {}",qos.getQos_id());
 			result.put("Status", 0);
 			result.put("description", "QosEntry created success qosid= "+qos.getQos_id());
 			return result;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			logger.error("fail to insert qos {}",qos.getQos_id());
 			result.put("Status", -1);
 			result.put("description", "successed to creat QosPolicy but failed to save  qosid= "+qos.getQos_id());
 			e.printStackTrace();
@@ -88,6 +95,7 @@ public class QosServiceImpl implements QosService{
 		
 	  }
 		else{
+			logger.error("fail to send qos {}",qos.getQos_id());
 			result.put("Status", -1);
 			result.put("description", "QosPolicy "+qos.getQos_id()+" collide with "+contain);
 			return result;
@@ -105,12 +113,14 @@ public class QosServiceImpl implements QosService{
 		try {
 			qosEntry.remove(null);
 			qosEntryDao.delete(qosEntry);
+			logger.info("success to delete qos {}",qosEntry.getQos_id());
 			result.put("Status", 0);
 			result.put("description", "delete success "+qosEntry.getQos_id());
 			return result;		
 		} catch (IOException |ConfigException|OperationalException  e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("fail to delete qos {} error detail {}",qosEntry.getQos_id(),e.getMessage());
 			result.put("Status", -1);
 			result.put("description", "failed to delete qospolicy");
 			return result;
@@ -152,11 +162,13 @@ public class QosServiceImpl implements QosService{
 		JSONObject result=new JSONObject();
 		try {
 			List<QosEntry> qosEntries=qosEntryDao.querryAll();
+			logger.info("success to querry qosentries");
 			result.put("Status", 0);
 			result.put("description", "querry success");
 			result.put("QosEntrys", JSON.toJSON(qosEntries));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			logger.info("fail to querry qosentries");
 			result.put("status", -1);
 			result.put("description", "failed to querry");
 			e.printStackTrace();

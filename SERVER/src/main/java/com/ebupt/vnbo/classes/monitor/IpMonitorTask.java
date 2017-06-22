@@ -3,6 +3,10 @@ package com.ebupt.vnbo.classes.monitor;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ebupt.vnbo.classes.exception.ODL_IO_Exception;
 import com.ebupt.vnbo.classes.exception.OperationalException;
 import com.ebupt.vnbo.classes.flow.FlowEntry;
@@ -22,6 +26,7 @@ import com.ebupt.vnbo.util.InfluxDBUtil;
 * 发布版本： V1.0  <br/>
  */
 public class IpMonitorTask implements Runnable{
+	private static Logger logger=LoggerFactory.getLogger(IpMonitorTask.class);
 	private static final String IPTABLE="5";
 	private static final String IPMEASUREMENT="ip_load";
 	private volatile boolean isactive;
@@ -105,6 +110,7 @@ public class IpMonitorTask implements Runnable{
 					}
 			} catch (NumberFormatException | ODL_IO_Exception e) {
 				// TODO Auto-generated catch block
+				logger.error("IpMonitorTask running error, error details {} ",e.getMessage());
 				e.printStackTrace();
 			}		
 		  }

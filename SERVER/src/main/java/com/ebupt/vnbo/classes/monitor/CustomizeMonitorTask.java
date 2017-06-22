@@ -3,6 +3,10 @@ package com.ebupt.vnbo.classes.monitor;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ebupt.vnbo.classes.enums.Protocol_Type;
 import com.ebupt.vnbo.classes.exception.ODL_IO_Exception;
 import com.ebupt.vnbo.classes.flow.FlowEntry;
@@ -21,6 +25,7 @@ import com.ebupt.vnbo.util.InfluxDBUtil;
 * 发布版本： V1.0  <br/>
  */
 public class CustomizeMonitorTask implements Runnable{
+	private static Logger logger=LoggerFactory.getLogger(CustomizeMonitor.class);
 	private static final String CUSTOMIZETABLE="1";
 	private static final long interval=4000;
 	private static final String measurement="customize_load";
@@ -64,10 +69,12 @@ public class CustomizeMonitorTask implements Runnable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				for(FlowEntry flowEntry:tableRead.getFlow()){
+				HashSet<FlowEntry> flowEntries=tableRead.getFlow();
+				if(flowEntries!=null){
+				for(FlowEntry flowEntry:flowEntries){
 					MonTag monTag=new MonTag();
 					monTag.setNode(node.getNode_id());
-					if("BaseFlow_0".equals(flowEntry.getId()))
+					if("BaseFlow_0".equals(flowEntry.getId()) || flowEntry.getId().startsWith("#UF$TABLE"))
 						continue;
 					
 					if(flowEntry.getMatch()!=null && flowEntry.getMatch().getEthernet_Match()!=null&&flowEntry.getMatch().getEthernet_Match().getEthernet_source()!=null){
@@ -123,12 +130,14 @@ public class CustomizeMonitorTask implements Runnable{
 				}
 					
 			}
+			}
 			InfluxDBUtil.put(timestamp,measurement,netMonitorMap);
 			System.out.println("customize  Monitoring "+" Thread "+Thread.currentThread().getName());
 			try {
 				Thread.sleep(interval);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
+				logger.error("CustomizeMonitorTask running error, error details {} ",e.getMessage());
 				e.printStackTrace();
 			}
 		

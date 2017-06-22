@@ -17,12 +17,15 @@ import com.ebupt.vnbo.request.initialize.InitRequest;
 import com.ebupt.vnbo.service.initialize.InitService;
 import com.ebupt.vnbo.serviceImpl.Initialize.InitServiceImpl;
 import com.ebupt.vnbo.util.BaseUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Servlet implementation class InitManage
  */
 public class InitManage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private InitService initService=new InitServiceImpl();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -44,7 +47,6 @@ public class InitManage extends HttpServlet {
 	       BufferedReader bufferedReader=new BufferedReader(new InputStreamReader((ServletInputStream)request.getInputStream(),"utf8"));
 	       JSONObject webRequest=BaseUtil.GetJson(bufferedReader);
 	       InitRequest initRequest=JSON.toJavaObject(webRequest, InitRequest.class);
-	       InitService initService=new InitServiceImpl();
 	       pr.write(initService.resolve(initRequest).toJSONString());
 
 	}

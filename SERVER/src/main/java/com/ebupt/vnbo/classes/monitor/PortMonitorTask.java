@@ -3,6 +3,10 @@ package com.ebupt.vnbo.classes.monitor;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ebupt.vnbo.classes.exception.ODL_IO_Exception;
 import com.ebupt.vnbo.classes.exception.OperationalException;
 import com.ebupt.vnbo.classes.node_static.NodeStatic;
@@ -23,6 +27,7 @@ import com.ebupt.vnbo.util.InfluxDBUtil;
  */
 public class PortMonitorTask implements Runnable {
 	//每4s进行一次轮询
+	private static Logger logger=LoggerFactory.getLogger(PortMonitorTask.class);
 	private static final long interval=4000;
 	private static String PORTMEASUREMENT="port_load";
 	private Map<MonTag, NetStatic> netMonitorMap=new HashMap<>();
@@ -109,6 +114,7 @@ public class PortMonitorTask implements Runnable {
 				Thread.sleep(interval);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
+				logger.error("PortMonitorTask running error, error details {} ",e.getMessage());
 				e.printStackTrace();
 			}
 		}

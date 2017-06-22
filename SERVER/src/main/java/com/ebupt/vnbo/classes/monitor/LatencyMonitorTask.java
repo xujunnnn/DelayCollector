@@ -1,5 +1,8 @@
 package com.ebupt.vnbo.classes.monitor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ebupt.vnbo.classes.exception.ODL_IO_Exception;
 import com.ebupt.vnbo.util.InfluxDBUtil;
 /**
@@ -12,6 +15,7 @@ import com.ebupt.vnbo.util.InfluxDBUtil;
 * ·¢²¼°æ±¾£º V1.0  <br/>
  */
 public class LatencyMonitorTask implements Runnable{
+	private static Logger logger=LoggerFactory.getLogger(LatencyMonitorTask.class);
 	private static final long interval=4000;
 	private Latency_list latency_list=new Latency_list();
 	private static final String LATENCYMEASUREMENT="latency_load";
@@ -75,6 +79,7 @@ public class LatencyMonitorTask implements Runnable{
 				Thread.sleep(interval);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
+				logger.error("LatencyMonitorTask running error, error details {} ",e.getMessage());
 				e.printStackTrace();
 			}
 			

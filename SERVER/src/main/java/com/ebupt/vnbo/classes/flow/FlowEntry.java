@@ -1,5 +1,10 @@
 package com.ebupt.vnbo.classes.flow;
 
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -13,8 +18,17 @@ import com.ebupt.vnbo.classes.flow.instruction.Instructions;
 import com.ebupt.vnbo.classes.flow.match.Match;
 import com.ebupt.vnbo.util.HttpUtil;
 
+/**
+ * 
+* 类名: FlowEntry.java <br/>
+* 包名 : com.ebupt.vnbo.classes.flow <br/>
+* 详细描述: TODO(FlowEntry流表项的实体类) <br/>
+* 开发人员： xujun   <br/>
+* 开发日期：2017年6月16日 <br/>
+* 发布版本： V1.0  <br/>
+ */
 public class FlowEntry implements Config,Operational {
-	
+	private static Logger logger=LoggerFactory.getLogger(FlowEntry.class);
 	@JSONField(name="flow-name")
 	private String flow_name;
 	private String  priority;
@@ -99,7 +113,101 @@ public class FlowEntry implements Config,Operational {
 		this.cookie = cookie;
 		return this;
 	}
+	
+	
+	
+	
 
+	@Override
+	public String toString() {
+		return "FlowEntry [flow_name=" + flow_name + ", priority=" + priority + ", idle_timeout=" + idle_timeout
+				+ ", hard_timeout=" + hard_timeout + ", flow_Statistic=" + flow_Statistic + ", table_id=" + table_id
+				+ ", cookie=" + cookie + ", id=" + id + ", instructions=" + instructions + ", match=" + match
+				+ ", tableid=" + tableid + "]";
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cookie == null) ? 0 : cookie.hashCode());
+		result = prime * result + ((flow_Statistic == null) ? 0 : flow_Statistic.hashCode());
+		result = prime * result + ((flow_name == null) ? 0 : flow_name.hashCode());
+		result = prime * result + ((hard_timeout == null) ? 0 : hard_timeout.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((idle_timeout == null) ? 0 : idle_timeout.hashCode());
+		result = prime * result + ((instructions == null) ? 0 : instructions.hashCode());
+		result = prime * result + ((match == null) ? 0 : match.hashCode());
+		result = prime * result + ((priority == null) ? 0 : priority.hashCode());
+		result = prime * result + ((table_id == null) ? 0 : table_id.hashCode());
+		result = prime * result + ((tableid == null) ? 0 : tableid.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FlowEntry other = (FlowEntry) obj;
+		if (cookie == null) {
+			if (other.cookie != null)
+				return false;
+		} else if (!cookie.equals(other.cookie))
+			return false;
+		if (flow_Statistic == null) {
+			if (other.flow_Statistic != null)
+				return false;
+		} else if (!flow_Statistic.equals(other.flow_Statistic))
+			return false;
+		if (flow_name == null) {
+			if (other.flow_name != null)
+				return false;
+		} else if (!flow_name.equals(other.flow_name))
+			return false;
+		if (hard_timeout == null) {
+			if (other.hard_timeout != null)
+				return false;
+		} else if (!hard_timeout.equals(other.hard_timeout))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (idle_timeout == null) {
+			if (other.idle_timeout != null)
+				return false;
+		} else if (!idle_timeout.equals(other.idle_timeout))
+			return false;
+		if (instructions == null) {
+			if (other.instructions != null)
+				return false;
+		} else if (!instructions.equals(other.instructions))
+			return false;
+		if (match == null) {
+			if (other.match != null)
+				return false;
+		} else if (!match.equals(other.match))
+			return false;
+		if (priority == null) {
+			if (other.priority != null)
+				return false;
+		} else if (!priority.equals(other.priority))
+			return false;
+		if (table_id == null) {
+			if (other.table_id != null)
+				return false;
+		} else if (!table_id.equals(other.table_id))
+			return false;
+		if (tableid == null) {
+			if (other.tableid != null)
+				return false;
+		} else if (!tableid.equals(other.tableid))
+			return false;
+		return true;
+	}
 	public void send(String node) throws ConfigException {
 		// TODO Auto-generated method stub
 		String url="http://"+ConfigUrl+"/opendaylight-inventory:nodes/node/"+node+"/flow-node-inventory:table/"+this.getTable_id()+"/flow/"+this.getId();
@@ -109,38 +217,39 @@ public class FlowEntry implements Config,Operational {
 		jsonObject.put("flow", jsonArray);
 		String []result=HttpUtil.Put_request(url, jsonObject);
 		String responsecode=result[0];
-		if(!"200".equals(responsecode) && ! "201".equals(responsecode))
-			throw new ConfigException("flow"+this.getId()+"sended to"+node+"failed");			
+		String responsebody=result[1];
+		if(!"200".equals(responsecode) && ! "201".equals(responsecode)){
+			logger.error("FlowEntry {} send error, error details {} ",this.getId(),responsebody);
+			throw new ConfigException("flow"+this.getId()+"sended to"+node+"failed");	
+		}
 	
 		
 	}
 	public void remove(String node) throws ConfigException {
 		// TODO Auto-generated method stub
 		String url="http://"+ConfigUrl+"/opendaylight-inventory:nodes/node/"+node+"/flow-node-inventory:table/"+this.getTable_id()+"/flow/"+this.getId();
-		String responsecode=HttpUtil.Delete_request(url)[0];
-		if(!"200".equals(responsecode) && !"201".equals(responsecode) && !"404".equals(responsecode))
+		String response[]=HttpUtil.Delete_request(url);
+		String responsecode=response[0];
+		String responsebody=response[1];
+		if(!"200".equals(responsecode) && !"201".equals(responsecode) && !"404".equals(responsecode)){
+			logger.error("FlowEntry {} remove error, error details {} ",this.getId(),responsebody);
 			throw new ConfigException("flow "+this.getId()+" delete from "+node+" failed");		
-		
+		}
 	}
 	public FlowEntry read(String node) throws OperationalException {
 		// TODO Auto-generated method stub
 		  String url="http://"+OperationalUrl+"/opendaylight-inventory:nodes/node/"+node+"/flow-node-inventory:table/"+this.getTable_id()+"/flow/"+this.getId();
 		  String []result=HttpUtil.Get_request(url);
 		  String code=result[0];
-		  if("404".equals(code))
+		  String responsebody=result[1];
+		  if("404".equals(code)){
+			  logger.error("FlowEntry {} send error, error details {} ",this.getId(),responsebody);
 			  throw new OperationalException("can not read the flow ");
-		  String s=result[1];
-		  JSONObject jsonObject=JSONObject.parseObject(s); 
+		  }		  
+		  JSONObject jsonObject=JSONObject.parseObject(responsebody); 
 		  FlowEntry flowEntry = JSON.parseObject(jsonObject.getJSONArray("flow-node-inventory:flow").getJSONObject(0).toJSONString(), FlowEntry.class);
 		  return flowEntry;
 		
-	}
-	@Override
-	public String toString() {
-		return "FlowEntry [flow_name=" + flow_name + ", priority=" + priority + ", idle_timeout=" + idle_timeout
-				+ ", hard_timeout=" + hard_timeout + ", flow_Statistic=" + flow_Statistic + ", table_id=" + table_id
-				+ ", cookie=" + cookie + ", id=" + id + ", instructions=" + instructions + ", match=" + match
-				+ ", tableid=" + tableid + "]";
 	}
 
 

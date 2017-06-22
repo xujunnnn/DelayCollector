@@ -24,53 +24,19 @@ public class MonTag {
 	private String udp_destport;
 	private String tcp_srcport;
 	private String tcp_destport;
+	private String queueid;
+	public String getFlowid() {
+		return flowid;
+	}
+	public MonTag setFlowid(String flowid) {
+		this.flowid = flowid;
+		return this;
+	}
 	public String getNode() {
 		return node;
 	}
 	public MonTag setNode(String node) {
 		this.node = node;
-		return this;
-	}
-	public String getUdp_srcport() {
-		return udp_srcport;
-	}
-	public MonTag setUdp_srcport(String udp_srcport) {
-		this.udp_srcport = udp_srcport;
-		return this;
-	}
-	public String getUdp_destport() {
-		return udp_destport;
-	}
-	public MonTag setUdp_destport(String udp_destport) {
-		this.udp_destport = udp_destport;
-		return this;
-	}
-	public String getTcp_srcport() {
-		return tcp_srcport;
-	}
-	public MonTag setTcp_srcport(String tcp_srcport) {
-		this.tcp_srcport = tcp_srcport;
-		return this;
-	}
-	public String getTcp_destport() {
-		return tcp_destport;
-	}
-	public MonTag setTcp_destport(String tcp_destport) {
-		this.tcp_destport = tcp_destport;
-		return this;
-	}
-	public String getSrcip() {
-		return srcip;
-	}
-	public MonTag setSrcip(String srcip) {
-		this.srcip = srcip;
-		return this;
-	}
-	public String getDestip() {
-		return destip;
-	}
-	public MonTag setDestip(String destip) {
-		this.destip = destip;
 		return this;
 	}
 	public Protocol_Type getProtocol_Type() {
@@ -101,11 +67,53 @@ public class MonTag {
 		this.inport = inport;
 		return this;
 	}
-	public String getFlowid() {
-		return flowid;
+	public String getSrcip() {
+		return srcip;
 	}
-	public MonTag setFlowid(String flowid) {
-		this.flowid = flowid;
+	public MonTag setSrcip(String srcip) {
+		this.srcip = srcip;
+		return this;
+	}
+	public String getDestip() {
+		return destip;
+	}
+	public MonTag setDestip(String destip) {
+		this.destip = destip;
+		return this;
+	}
+	public String getUdp_srcport() {
+		return udp_srcport;
+	}
+	public MonTag setUdp_srcport(String udp_srcport) {
+		this.udp_srcport = udp_srcport;
+		return this;
+	}
+	public String getUdp_destport() {
+		return udp_destport;
+	}
+	public MonTag setUdp_destport(String udp_destport) {
+		this.udp_destport = udp_destport;
+		return this;
+	}
+	public String getTcp_srcport() {
+		return tcp_srcport;
+	}
+	public MonTag setTcp_srcport(String tcp_srcport) {
+		this.tcp_srcport = tcp_srcport;
+		return this;
+	}
+	public String getTcp_destport() {
+		return tcp_destport;
+	}
+	public MonTag setTcp_destport(String tcp_destport) {
+		this.tcp_destport = tcp_destport;
+		return this;
+	}
+	public String getQueueid() {
+		return queueid;
+	}
+	public MonTag setQueueid(String queueid) {
+		this.queueid = queueid;
 		return this;
 	}
 	@Override
@@ -118,6 +126,7 @@ public class MonTag {
 		result = prime * result + ((inport == null) ? 0 : inport.hashCode());
 		result = prime * result + ((node == null) ? 0 : node.hashCode());
 		result = prime * result + ((protocol_Type == null) ? 0 : protocol_Type.hashCode());
+		result = prime * result + ((queueid == null) ? 0 : queueid.hashCode());
 		result = prime * result + ((srcip == null) ? 0 : srcip.hashCode());
 		result = prime * result + ((srcmac == null) ? 0 : srcmac.hashCode());
 		result = prime * result + ((tcp_destport == null) ? 0 : tcp_destport.hashCode());
@@ -162,6 +171,11 @@ public class MonTag {
 			return false;
 		if (protocol_Type != other.protocol_Type)
 			return false;
+		if (queueid == null) {
+			if (other.queueid != null)
+				return false;
+		} else if (!queueid.equals(other.queueid))
+			return false;
 		if (srcip == null) {
 			if (other.srcip != null)
 				return false;
@@ -199,13 +213,6 @@ public class MonTag {
 		return "MonTag [flowid=" + flowid + ", node=" + node + ", protocol_Type=" + protocol_Type + ", srcmac=" + srcmac
 				+ ", destmac=" + destmac + ", inport=" + inport + ", srcip=" + srcip + ", destip=" + destip
 				+ ", udp_srcport=" + udp_srcport + ", udp_destport=" + udp_destport + ", tcp_srcport=" + tcp_srcport
-				+ ", tcp_destport=" + tcp_destport + "]";
+				+ ", tcp_destport=" + tcp_destport + ", queueid=" + queueid + "]";
 	}
-	
-	
-	
-
-	
-	
-	
 }

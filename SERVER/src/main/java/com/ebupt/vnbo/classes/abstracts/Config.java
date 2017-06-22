@@ -1,4 +1,7 @@
 package com.ebupt.vnbo.classes.abstracts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ebupt.vnbo.classes.exception.ODL_IO_Exception;
 import com.ebupt.vnbo.util.BaseUtil;
 /**

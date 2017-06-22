@@ -1,6 +1,9 @@
 package com.ebupt.vnbo.serviceImpl.Initialize;
 import java.util.HashSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ebupt.vnbo.classes.enums.OperationType;
@@ -16,6 +19,7 @@ import com.ebupt.vnbo.classes.monitor.CustomizeMonitorTask;
 import com.ebupt.vnbo.classes.monitor.IpMonitorTask;
 import com.ebupt.vnbo.classes.monitor.LatencyMonitorTask;
 import com.ebupt.vnbo.classes.monitor.ProtocolMonTask;
+import com.ebupt.vnbo.classes.monitor.QueueMonitorTask;
 import com.ebupt.vnbo.classes.table.Table;
 import com.ebupt.vnbo.classes.topology.Node;
 import com.ebupt.vnbo.classes.topology.Termination_point;
@@ -25,18 +29,26 @@ import com.ebupt.vnbo.service.initialize.InitService;
 import com.ebupt.vnbo.service.topology.TopologyService;
 import com.ebupt.vnbo.serviceImpl.topology.TopologyServiceImpl;
 import com.ebupt.vnbo.util.FlowUtil;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
+@Component
 public class InitServiceImpl implements InitService{
 	private static Thread PROTOCOL_MON_THREAD;
 	private static Thread IP_MON_THREAD;
 	private static Thread LATENCY_MON_THREAD;
 	private static Thread CUSTOMIZE_MON_THREAD;
+	private static Thread QUEUE_MON_THREAD;
 	private static volatile boolean isMonFlowInstalled=false;
+	private static Logger logger=LoggerFactory.getLogger(InitServiceImpl.class);
 	
 	@Override
 	public JSONObject resolve(Request request) {
+		
 		// TODO Auto-generated method stub
 		JSONObject result=new JSONObject();
 		InitRequest initRequest=(InitRequest) request;
+		logger.info("receive InitRequest {}",initRequest.toString());
 		if(initRequest.getOperationType()==OperationType.INIT){
 			if(initRequest.getTag()==Tag.BASE)
 				return initBaseFlow();
@@ -63,9 +75,7 @@ public class InitServiceImpl implements InitService{
 		
 		JSONObject result=new JSONObject();
 		TopologyService topologyService=new TopologyServiceImpl();
-
 		try {
-
 			for(Node node:topologyService.get_switch()){
 			FlowEntry flow=new FlowEntry();
 			Match match=new Match();
@@ -118,17 +128,20 @@ public class InitServiceImpl implements InitService{
 			
 		
 			FlowUtil.initMap();
+			logger.info("succsee to init baseFlow");
 			result.put("Status", 0);
 			result.put("description", "success to init baseFlow");
 			
 		} catch (OperationalException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("fail to init base flow, error detail {}",e.getMessage());
 			result.put("Status", -1);
 			result.put("description", "init error, can not read the openflow topology");
 		} catch (ConfigException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("fail to init base flow, error detail {}",e.getMessage());
 			result.put("Status", -1);
 			result.put("description", "init error, failed to send the initflows");
 		}
@@ -173,11 +186,11 @@ public class InitServiceImpl implements InitService{
 					 match2.Set_Ip_Match(String.valueOf(p.value()), null, null,null)
 									.setIn_port(t.getTp_id())
 									.Set_Mac_Match(null, null, "2048");
-					 flow2.setPriority(MIDPRIORITY);
+					 flow2.setPriority(HIGHPRIORITY);
 					}
 					else{
 					 match2.setIn_port(t.getTp_id());	
-					 flow2.setPriority(LOWPRIORITY);
+					 flow2.setPriority(MIDPRIORITY);
 					}
 					flow2.setId("MonitorFlow"+Long.toString(FlowUtil.getFlowId(node)))
 						 .setFlow_name("MonitorFlow"+flow2.getId())
@@ -199,9 +212,11 @@ public class InitServiceImpl implements InitService{
 			IpMonitorTask ipMonitorTask=new IpMonitorTask().setIsactive(true);
 			LatencyMonitorTask latencyMonitorTask=new LatencyMonitorTask().setIsactive(true);
 			CustomizeMonitorTask customizeMonitorTask=new CustomizeMonitorTask().setIsactive(true);
+			QueueMonitorTask queueMonitorTask=new QueueMonitorTask().setIsactive(true);
 			protocolMonTask.setNodes(topologyService.get_access_node());
 			ipMonitorTask.setNodes(topologyService.get_access_node());
 			customizeMonitorTask.setNodes(topologyService.get_access_node());
+			queueMonitorTask.setNodes(topologyService.get_access_node());
 			PROTOCOL_MON_THREAD=new Thread(protocolMonTask);
 			PROTOCOL_MON_THREAD.start();
 			IP_MON_THREAD=new Thread(ipMonitorTask);
@@ -210,18 +225,22 @@ public class InitServiceImpl implements InitService{
 			LATENCY_MON_THREAD.start();
 			CUSTOMIZE_MON_THREAD=new Thread(customizeMonitorTask);
 			CUSTOMIZE_MON_THREAD.start();
-			/**灏嗘爣璇嗙缃綅*/
+			QUEUE_MON_THREAD=new Thread(queueMonitorTask);
+			QUEUE_MON_THREAD.start();	
 			isMonFlowInstalled=true;
+			logger.info("success to init Monitor flow");
 			result.put("Status", 0);
 			result.put("description", "success to init MonitorFlow");
 		} catch (OperationalException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("fail to init monitor flow, error detail {}",e.getMessage());
 			result.put("Status", -1);
 			result.put("description", "init error, can not read the openflow topology");
 		} catch (ConfigException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("fail to init monitor flow, error detail {}",e.getMessage());
 			result.put("Status", -1);
 			result.put("description", "init error, failed to send the Monflows");
 		}

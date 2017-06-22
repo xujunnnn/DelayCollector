@@ -17,7 +17,6 @@ import com.ebupt.vnbo.classes.flow.action.Action;
 public class Apply_Actions{
 	@JSONField(name="action")
 	private ArrayList<Action> actions=new ArrayList<Action>();
-
 	public ArrayList<Action> getActions() {
 		return actions;
 	}

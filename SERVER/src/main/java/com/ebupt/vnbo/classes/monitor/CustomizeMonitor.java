@@ -2,6 +2,9 @@ package com.ebupt.vnbo.classes.monitor;
 
 import java.util.HashSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ebupt.vnbo.classes.abstracts.Config;
 import com.ebupt.vnbo.classes.enums.Protocol_Type;
@@ -23,12 +26,13 @@ import com.ebupt.vnbo.serviceImpl.topology.TopologyServiceImpl;
  * 
 * 类名: CustomizeMonitor.java <br/>
 * 包名 : com.ebupt.vnbo.classes.monitor <br/>
-* 详细描述: TODO(用一句话描述该文件做什么) <br/>
+* 详细描述: TODO(CustomizeMonitor 自定义监控项实体类) <br/>
 * 开发人员： xujun   <br/>
 * 开发日期：2017年6月8日 <br/>
 * 发布版本： V1.0  <br/>
  */
 public class CustomizeMonitor implements Config {
+	private static Logger logger=LoggerFactory.getLogger(CustomizeMonitor.class);
 	private String id;
 	private Protocol_Type protocol_Type;
 	private String srchost;

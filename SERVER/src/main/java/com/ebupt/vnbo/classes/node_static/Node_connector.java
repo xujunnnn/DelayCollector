@@ -1,5 +1,7 @@
 package com.ebupt.vnbo.classes.node_static;
 
+import java.util.ArrayList;
+
 import com.alibaba.fastjson.annotation.JSONField;
 public class Node_connector {
 	private String id;
@@ -13,6 +15,15 @@ public class Node_connector {
     private String flow_node_inventory_maximum_speed;
 	@JSONField(name="opendaylight-port-statistics:flow-capable-node-connector-statistics")
 	private Node_Connector_Static node_Connector_Static;
+	@JSONField(name="flow-node-inventory:queue")
+	private ArrayList<Queue> queues;
+	
+	public ArrayList<Queue> getQueues() {
+		return queues;
+	}
+	public void setQueues(ArrayList<Queue> queues) {
+		this.queues = queues;
+	}
 	public String getId() {
 		return id;
 	}

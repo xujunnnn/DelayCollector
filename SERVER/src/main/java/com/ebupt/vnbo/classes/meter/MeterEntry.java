@@ -1,6 +1,9 @@
 package com.ebupt.vnbo.classes.meter;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -22,6 +25,7 @@ import com.ebupt.vnbo.util.HttpUtil;
 * ·¢²¼°æ±¾£º V1.0  <br/>
  */
 public class MeterEntry implements Config,Operational {
+	private static Logger logger=LoggerFactory.getLogger(MeterEntry.class);
 	@JSONField(name="meter-id")
 	private String meter_id;
 	@JSONField(name="meter-name")
@@ -94,9 +98,13 @@ public class MeterEntry implements Config,Operational {
 	public void remove(String node) throws ConfigException {
 		// TODO Auto-generated method stub
 		String url="http://"+ConfigUrl+"/opendaylight-inventory:nodes/node/"+node+"/flow-node-inventory:meter/"+meter_id;
-		String responsecode=HttpUtil.Delete_request(url)[0];
-		if(!"201".equals(responsecode) && !"200".equals(responsecode) && !"404".equals(responsecode))
+		String response[]=HttpUtil.Delete_request(url);
+		String responsecode=response[0];
+		String responsebody=response[1];
+		if(!"201".equals(responsecode) && !"200".equals(responsecode) && !"404".equals(responsecode)){
+			logger.error("MeterEntry {} remove error, error details {} ",this.getMeter_id(),responsebody);
 			throw new ConfigException("meter "+this.getMeter_id()+" delete failed");
+		}
 		
 	}
 	public void send(String node) throws ConfigException {
@@ -109,9 +117,10 @@ public class MeterEntry implements Config,Operational {
 		String response[]=HttpUtil.Put_request(url, jsonObject);
 		String responsecode=response[0];
 		String responsebody=response[1];
-		if(!"200".equals(responsecode) && !"201".equals(responsecode))
+		if(!"200".equals(responsecode) && !"201".equals(responsecode)){
+			logger.error("MeterEntry {} send error, error details {} ",this.getMeter_id(),responsebody);
 			throw new ConfigException("meter "+this.getMeter_id()+" sended to "+node+"fail"+"  error information "+ responsebody);
-		
+		}
 	}
 	@Override
 	public int hashCode() {

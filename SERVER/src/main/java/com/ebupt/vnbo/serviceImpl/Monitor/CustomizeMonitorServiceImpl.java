@@ -3,6 +3,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ebupt.vnbo.classes.enums.OperationType;
@@ -15,6 +18,8 @@ import com.ebupt.vnbo.request.monitor.CustomizeMonRequest;
 import com.ebupt.vnbo.service.Monitor.CustomizeMonitorService;
 import com.mysql.fabric.xmlrpc.base.Array;
 
+import sun.util.logging.resources.logging;
+
 /**
  * 
 * 类名: CustomizeMonitorServiceImpl.java <br/>
@@ -25,15 +30,18 @@ import com.mysql.fabric.xmlrpc.base.Array;
 * 发布版本： V1.0  <br/>
  */
 public class CustomizeMonitorServiceImpl implements CustomizeMonitorService {
-
+	private static Logger logger=LoggerFactory.getLogger(CustomizeMonitorServiceImpl.class);
 	@Override
 	public JSONObject resolve(Request request) {
 		// TODO Auto-generated method stub
 		CustomizeMonRequest customizeMonRequest=(CustomizeMonRequest) request;
 		OperationType operationType=customizeMonRequest.getOperationType();
+		logger.info("receive CustomizeMonRequest {}",customizeMonRequest.toString());
 		
 		if(operationType==OperationType.ADD)
+			
 			return addMon(customizeMonRequest.getCustomizeMonitor());
+		
 		if(operationType==OperationType.REMOVE)
 			return removeMon(customizeMonRequest.getCustomizeMonitor());
 		if(operationType==OperationType.QUERRY)
@@ -67,16 +75,19 @@ public class CustomizeMonitorServiceImpl implements CustomizeMonitorService {
 			if(!customizeMonitorDao.contains(customizeMonitor)){
 			customizeMonitor.send(null);
 			customizeMonitorDao.Insert(customizeMonitor);
+			logger.info("success to add CustomizeMonitor {}",customizeMonitor.getId());
 			result.put("Status", 0);
 			result.put("description", "success to creat customize monitor  "+customizeMonitor.getId());
 			}
 			else {
+				logger.error("fail to add CustomizeMonitor {}",customizeMonitor.getId());
 				result.put("Status", -1);
 				result.put("description", "this customize monitor  "+customizeMonitor.getId()+"has been added before");			
 			}
 		} catch (ODL_IO_Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("fail to add CustomizeMonitor {} error deatils {}",customizeMonitor.getId(),e.getMessage());
 			result.put("Status", -1);
 			result.put("description", "failed to creat customize monitor  "+customizeMonitor.getId());
 		}
@@ -88,7 +99,7 @@ public class CustomizeMonitorServiceImpl implements CustomizeMonitorService {
 	/**
 	 * 
 	* 方法名：removeMon</br>
-	* 详述：TODO（简单方法可一句话概述）</br>
+	* 详述：TODO（删除指定的自定义监控项）</br>
 	* 开发人员：xujun</br>
 	* 创建时间：2017年6月8日  </br>
 	* @param monTag
@@ -102,11 +113,13 @@ public class CustomizeMonitorServiceImpl implements CustomizeMonitorService {
 		try {
 			customizeMonitor.remove(null);
 			customizeMonitorDao.delete(customizeMonitor);
+			logger.info("success to remove CustomizeMonitor {}",customizeMonitor.getId());
 			result.put("Status", 0);
 			result.put("description", "success to creat customize monitor  "+customizeMonitor.getId());
 		} catch (ODL_IO_Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("fail to add CustomizeMonitor {}, error datail {}",customizeMonitor.getId(),e.getMessage());
 			result.put("Status", 1);
 			result.put("description", "failed to creat customize monitor  "+customizeMonitor.getId());
 		}
@@ -132,12 +145,14 @@ public class CustomizeMonitorServiceImpl implements CustomizeMonitorService {
 		CustomizeMonitorDao customizeMonitorDao=new CustomizeMonitorDaoImpl();
 	    try {
 			customizeMonitor=customizeMonitorDao.querry(customizeMonitor);
+			logger.info("success to querry CustomizeMonitor {}",customizeMonitor.getId());
 			result.put("Status", 0);
 			result.put("description", "success to querry customize monitor  "+customizeMonitor.getId());
 			result.put("CustomizeMonitor", JSON.toJSON(customizeMonitor));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("fail to querry CustomizeMonitor {}, error details",customizeMonitor.getId(),e.getMessage());
 			result.put("Status", 1);
 			result.put("description", "failed to querry customize monitor  "+customizeMonitor.getId());
 		}
@@ -161,12 +176,14 @@ public class CustomizeMonitorServiceImpl implements CustomizeMonitorService {
 		CustomizeMonitorDao customizeMonitorDao=new CustomizeMonitorDaoImpl();
 		try {
 			List<CustomizeMonitor> customizeMonitors=customizeMonitorDao.querryAll();
+			logger.info("success to querry CustomizeMonitor ");
 			result.put("Status", 0);
 			result.put("description", "success to querry customize monitor  ");
 			result.put("CustomizeMonitors", JSON.toJSON(customizeMonitors));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("fail to querry CustomizeMonitor ");
 			result.put("Status", 1);
 			result.put("description", "failed to querry customize monitor  ");
 		}

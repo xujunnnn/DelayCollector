@@ -6,7 +6,15 @@ import com.alibaba.fastjson.JSON;
 import com.ebupt.vnbo.classes.enums.OperationType;
 import com.ebupt.vnbo.classes.qos.QosEntry;
 import com.ebupt.vnbo.request.Request;
-
+/**
+ * 
+* 类名: QosRequest.java <br/>
+* 包名 : com.ebupt.vnbo.request.qos <br/>
+* 详细描述: TODO(Qos请求实体类) <br/>
+* 开发人员： xujun   <br/>
+* 开发日期：2017年6月16日 <br/>
+* 发布版本： V1.0  <br/>
+ */
 public class QosRequest implements Request {
 	private ArrayList<QosEntry> qosEntries;
 	private OperationType operationType;

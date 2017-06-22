@@ -23,6 +23,7 @@ import com.ebupt.vnbo.service.topology.TopologyService;
 import com.ebupt.vnbo.util.TopoUtil;
 
 public class TopologyServiceImpl implements TopologyService {
+	
 	private static Topology topology=new Topology();
 	//鐢ㄤ簬缁存姢鍙互杩涜鍒涘缓铏氭嫙缃戠粶鐨勪富鏈�
 	public JSONObject resolve(Request request) {

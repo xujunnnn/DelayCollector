@@ -64,6 +64,11 @@ public class InfluxDBUtil {
 			tags.put("SrcMac", monTag.getSrcmac());
 			tags.put("DestMac", monTag.getDestmac());
 		}
+		if("queue_load".equals(measurement)){
+			tags.put("Node", monTag.getNode());
+			tags.put("InPort", monTag.getInport());
+			tags.put("Queue", monTag.getQueueid());
+		}
 		if("customize_load".equals(measurement)){
 			if(monTag.getNode()!=null)
 				tags.put("Node", monTag.getNode());

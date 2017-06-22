@@ -7,7 +7,15 @@ import com.ebupt.vnbo.classes.enums.OperationType;
 import com.ebupt.vnbo.classes.enums.Protocol_Type;
 import com.ebupt.vnbo.classes.monitor.CustomizeMonitor;
 import com.ebupt.vnbo.request.Request;
-
+/**
+ * 
+* 类名: CustomizeMonRequest.java <br/>
+* 包名 : com.ebupt.vnbo.request.monitor <br/>
+* 详细描述: TODO() <br/>
+* 开发人员： xujun   <br/>
+* 开发日期：2017年6月16日 <br/>
+* 发布版本： V1.0  <br/>
+ */
 public class CustomizeMonRequest implements Request 
 {	
 	private List<CustomizeMonitor> customizeMonitors;
