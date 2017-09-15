@@ -10,12 +10,6 @@ package delaycollector.impl;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-
-import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDB.ConsistencyLevel;
-import org.influxdb.InfluxDBFactory;
-import org.influxdb.dto.BatchPoints;
-import org.influxdb.dto.Point;
 import org.opendaylight.controller.liblldp.PacketException;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpVersion;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.node.NodeConnector;
@@ -32,7 +26,6 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.packet.ipv4.rev140528.ipv4.
 import delaycollector.impl.util.Ipv4Option;
 
 public class DelayFromIpv4 implements Ipv4PacketListener {
-	private InfluxDB influxDB ;
 	private DelaycollectorConfig config;
 	private Map<String, Long> delayMap;
 	public  DelayFromIpv4(DelaycollectorConfig config,Map<String, Long> delayMap) {
@@ -48,10 +41,10 @@ public class DelayFromIpv4 implements Ipv4PacketListener {
 		if (packetReceived == null || packetReceived.getPacketChain() == null) {
             return;
         }
-
         RawPacket rawPacket = null;
         EthernetPacket ethernetPacket = null;
         Ipv4Packet ipv4Packet = null;
+        
         for (PacketChain packetChain : packetReceived.getPacketChain()) {
             if (packetChain.getPacket() instanceof RawPacket) {
                 rawPacket = (RawPacket) packetChain.getPacket();
@@ -71,11 +64,8 @@ public class DelayFromIpv4 implements Ipv4PacketListener {
         try {
                ipv4Option=(Ipv4Option)ipv4Option.deserialize(ipv4Packet.getIpv4Options(),0,0);
                String ncId = rawPacket.getIngress().getValue().firstIdentifierOf(NodeConnector.class).firstKeyOf(NodeConnector.class, NodeConnectorKey.class).getId().getValue();
-        
-        	long delay=cacluateDelay(ipv4Option);
-        	delayMap.put(ncId, delay);
-       // 	Save(System.currentTimeMillis(),ncId,delay);
-        //	System.out.println(ncId+"<><><><><><>"+delay);
+               long delay=cacluateDelay(ipv4Option);
+               delayMap.put(ncId, delay);
         } catch (PacketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,25 +79,4 @@ public class DelayFromIpv4 implements Ipv4PacketListener {
 		long delay=(time3-time1)*1000000000+(time4-time2);
 		return delay;
 	}
-	
-	public void Save(long timestamp,String ncid,long delay){
-		
-		BatchPoints batchPoints = BatchPoints
-				.database(config.getInfluxdbDatabaseName())
-				.retentionPolicy("autogen")
-				.consistency(ConsistencyLevel.ALL)
-				.build();
-		Point point= Point.measurement(config.getInfluxdbMeasurementName())
-				.time(timestamp,TimeUnit.MILLISECONDS)
-				.addField("delay/ns",delay)
-				.tag("NodeConnector", ncid)
-				.build();
-		batchPoints.point(point);
-		influxDB.write(batchPoints);
-		
-	}
-	
-	
-	
-
 }

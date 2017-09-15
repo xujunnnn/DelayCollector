@@ -49,20 +49,21 @@ public class Delay_Sender_Task implements Runnable{
 			IPv4 iPv4=new IPv4();
 			iPv4.setTtl((byte)1).setProtocol((byte)KnownIpProtocols.Experimentation1.getIntValue());
 			try {
-			iPv4.setSourceAddress(InetAddress.getByName("0.0.0.1")).setDestinationAddress(InetAddress.getByName("0.0.0.2"));
-			//generate a ethernet packet
-			Ethernet ethernet=new Ethernet();
-			EthernetAddress srcMac=new EthernetAddress(new byte[]{(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0xee});
-			EthernetAddress destMac=new EthernetAddress(new byte[]{(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0xef});
-			ethernet.setSourceMACAddress(srcMac.getValue()).setDestinationMACAddress(destMac.getValue());
-			ethernet.setEtherType(EtherTypes.IPv4.shortValue());
-			ethernet.setPayload(iPv4);
-			TransmitPacketInputBuilder transmitPacketInputBuilde=new TransmitPacketInputBuilder();		
-			packetDispatcher.setInventoryReader(inventoryReader);
-			HashMap<String, NodeConnectorRef> nodeConnectorMap=inventoryReader.getControllerSwitchConnectors();
-			for(String nodeid:nodeConnectorMap.keySet()){		
-				packetDispatcher.floodPacket(nodeid, ethernet.serialize(), nodeConnectorMap.get(nodeid), null,true);    
-			}
+				iPv4.setSourceAddress(InetAddress.getByName("0.0.0.1")).setDestinationAddress(InetAddress.getByName("0.0.0.2"));
+				//generate a ethernet packet
+				Ethernet ethernet=new Ethernet();
+				EthernetAddress srcMac=new EthernetAddress(new byte[]{(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0xee});
+				EthernetAddress destMac=new EthernetAddress(new byte[]{(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0xef});
+				ethernet.setSourceMACAddress(srcMac.getValue()).setDestinationMACAddress(destMac.getValue());
+				ethernet.setEtherType(EtherTypes.IPv4.shortValue());
+				ethernet.setPayload(iPv4);
+				TransmitPacketInputBuilder transmitPacketInputBuilde=new TransmitPacketInputBuilder();		
+				packetDispatcher.setInventoryReader(inventoryReader);
+				HashMap<String, NodeConnectorRef> nodeConnectorMap=inventoryReader.getControllerSwitchConnectors();
+				for(String nodeid:nodeConnectorMap.keySet()){		
+					packetDispatcher.floodPacket(nodeid, ethernet.serialize(), nodeConnectorMap.get(nodeid), null,true);    
+				}
+	
 			} catch (ConstructionException | UnknownHostException | PacketException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -73,10 +74,7 @@ public class Delay_Sender_Task implements Runnable{
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
-			
-			
+			}			
 		}
 		
 	}

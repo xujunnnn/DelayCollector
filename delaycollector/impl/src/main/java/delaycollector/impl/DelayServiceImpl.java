@@ -49,10 +49,10 @@ public class DelayServiceImpl implements DelaycollectorService {
 		GetGlobalDelayOutputBuilder getGlobalDelayOutputBuilder=new GetGlobalDelayOutputBuilder();
 		List<DelayList> delayLists=new ArrayList<DelayList>();
 		for(String ncid:delayMap.keySet()){
-		DelayListBuilder delayListBuilder=new DelayListBuilder();
-		delayListBuilder.setKey(new DelayListKey(ncid));
-		delayListBuilder.setDelay(delayMap.get(ncid));
-		delayLists.add(delayListBuilder.build());
+			DelayListBuilder delayListBuilder=new DelayListBuilder();
+			delayListBuilder.setKey(new DelayListKey(ncid));
+			delayListBuilder.setDelay(delayMap.get(ncid));
+			delayLists.add(delayListBuilder.build());	
 		}
 		getGlobalDelayOutputBuilder.setDelayList(delayLists);
 		return RpcResultBuilder.success(getGlobalDelayOutputBuilder.build()).buildFuture();

@@ -11,7 +11,17 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-
+<profiles>
+    <profile>
+        <id>disable-java8-doclint</id>
+        <activation>
+            <jdk>[1.8,)</jdk>
+        </activation>
+        <properties>
+            <additionalparam>-Xdoclint:none</additionalparam>
+        </properties>
+    </profile>
+</profiles>	
   <parent>
     <groupId>org.opendaylight.controller</groupId>
     <artifactId>config-parent</artifactId>
@@ -27,12 +37,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <name>ODL :: org.bupt :: ${project.artifactId}</name>
   <packaging>bundle</packaging>
  
-  <dependencies>
-<dependency>
-    <groupId>org.apache.servicemix.bundles</groupId>
-    <artifactId>org.apache.servicemix.bundles.influxdb-java</artifactId>
-    <version>2.7_1-SNAPSHOT</version>
-</dependency>	
+  <dependencies>	
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>delaycollector-api</artifactId>
@@ -81,11 +86,23 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>org.opendaylight.l2switch.arphandler.core,org.opendaylight.l2switch.arphandler.inventory,org.opendaylight.l2switch.arphandler.flow,org.opendaylight.yang.gen.v1.urn.opendaylight.packet.arp.handler.config.rev140528,org.influxdb.*,com.squareup.moshi,okhttp3,okhttp3.logging,okio,
-            okhttp3.internal.*,retrofit2,retrofit2.converter.moshi,retrofit2.http,android.os,android.util</Export-Package>
+            <Export-Package>org.opendaylight.l2switch.arphandler.core,org.opendaylight.l2switch.arphandler.inventory,org.opendaylight.l2switch.arphandler.flow</Export-Package>
           </instructions>
         </configuration>
       </plugin>
+ <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-javadoc-plugin</artifactId>
+      <version>2.9.1</version>
+      <executions>
+        <execution>
+          <id>attach-javadocs</id> <!-- The actual id should be apparent from maven output -->
+          <configuration>
+            <additionalparam>${javadoc.opts}</additionalparam>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
       </plugins>
       </build>
 </project>
