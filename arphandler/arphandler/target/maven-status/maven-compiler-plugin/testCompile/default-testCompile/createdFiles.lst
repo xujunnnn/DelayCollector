@@ -1,0 +1,5 @@
+org\opendaylight\l2switch\arphandler\core\ArpPacketHandlerTest.class
+org\opendaylight\l2switch\arphandler\flow\InitialFlowWriterTest.class
+org\opendaylight\l2switch\arphandler\core\ProactiveFloodFlowWriterTest.class
+org\opendaylight\l2switch\arphandler\inventory\InventoryReaderTest.class
+org\opendaylight\l2switch\arphandler\core\PacketDispatcherTest.class

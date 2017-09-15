@@ -1,0 +1,4 @@
+org.opendaylight.l2switch.arphandler.core
+org.opendaylight.l2switch.arphandler.flow
+org.opendaylight.l2switch.arphandler.inventory
+org.opendaylight.yang.gen.v1.urn.opendaylight.packet.arp.handler.config.rev140528
