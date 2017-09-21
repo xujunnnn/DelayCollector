@@ -86,7 +86,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>org.opendaylight.l2switch.arphandler.core,org.opendaylight.l2switch.arphandler.inventory,org.opendaylight.l2switch.arphandler.flow</Export-Package>
+            <Export-Package>org.opendaylight.l2switch.arphandler.core,org.opendaylight.l2switch.arphandler.inventory,org.opendaylight.l2switch.arphandler.flow,org.opendaylight.yang.gen.v1.urn.opendaylight.packet.arp.handler.config.rev140528</Export-Package>
           </instructions>
         </configuration>
       </plugin>
