@@ -1,2 +1,3 @@
 # DelayCollector
 基于odl的时延收集器。（只有控制器端代码，交换机端代码非本人完成，暂时无法提供） 先编译arphandler在编译delayconllector window下会报错(不能生成javadoc)，建议在linux下编译运行。
+之前如果没有编译过l2-switch liblldp等插件，请提前编译好相关插件，确保本地仓库中的jar版本与项目pom中所需的版本一致
