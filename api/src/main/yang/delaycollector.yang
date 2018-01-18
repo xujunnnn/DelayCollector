@@ -1,0 +1,45 @@
+module delaycollector {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:delaycollector";
+    prefix "delaycollector";
+
+    revision "2015-01-05" {
+        description "Initial revision of delaycollector model";
+    }
+
+    rpc getDelay {
+        input {
+            leaf NodeConnector{
+                type string;
+            }
+        }
+        output {
+            leaf delay {
+                type uint32;
+            }
+        }
+    }
+     rpc getGlobalDelay
+    {
+        output
+        {
+         list delay-list{
+         description "latency info";
+         config false;
+         key "nodeConnector";
+         leaf nodeConnector{
+         description "srcnode";
+         type string;
+}
+ leaf delay{
+         description "delay";
+         type uint32;
+}
+
+
+          }
+
+        }
+    }
+
+}

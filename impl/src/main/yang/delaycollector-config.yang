@@ -1,0 +1,54 @@
+module delaycollector-config {
+
+    yang-version 1;
+    namespace "urn:opendaylight:packet:delaycollector-config";
+    prefix "delaycollector-config";
+
+    description
+        "This module contains the base configuration for 
+        implementation.";
+
+    revision 2014-05-28 {
+        description "Initial revision.";
+    }
+
+    container delaycollector-config {
+    	 leaf delay-flow-table-id {
+             type uint8;
+             default 0;
+         }
+         leaf delay-flow-priority {
+             type uint16;
+             default 10;
+         }
+         leaf delay-flow-hard-timeout {
+             type uint16;
+             default 0;
+         }
+         leaf delay-flow-idle-timeout {
+             type uint16;
+             default 0;
+      	}
+        leaf option-type {
+            type uint8;
+            default 68;
+        }        
+        leaf querry-delay {
+            type uint16;
+            default 100;
+        }
+        leaf influxdb-address {
+            type string;
+        }
+        leaf is-active{
+            type boolean;
+            default false;
+        }
+	leaf influxdb-database-name{
+ 	    type string;
+	}
+	leaf influxdb-measurement-name{
+	    type string;
+	}
+    }
+}
